@@ -1,11 +1,17 @@
 import Users from "../models/Users";
+import bcrypt from "bcrypt";
 export const registerControllerPost = async (req, res) => {
   try {
-    const { email } = req.body;
+    //verify this user dont exist
+    const { email, password } = req.body;
     const responseEmail = await Users.findOne({ email });
     if (responseEmail) return res.status(400).json("user already exist");
 
     let userSaved = new Users(req.body);
+    //encrypt password
+    const salt = await bcrypt.genSalt(10);
+    userSaved.password = await bcrypt.hash(password, salt);
+
     await userSaved.save(userSaved);
     res.status(201).json(userSaved);
   } catch (error) {
