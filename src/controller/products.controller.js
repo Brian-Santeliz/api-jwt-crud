@@ -5,7 +5,7 @@ export const getController = async (req, res) => {
     const product = await Product.find();
     if (!product) return res.status(200).json("Product stock is empty");
     const userSession = await Users.findOne({ _id: req.userId });
-    res.status(200).json({ product, user: userSession.name });
+    res.status(200).json({ user: userSession.name, product });
   } catch (error) {
     console.error(error);
   }
