@@ -1,1 +1,3 @@
-const app = require('./app')
+import "./app";
+import initDB from "./config/database";
+initDB();

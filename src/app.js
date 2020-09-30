@@ -1,8 +1,22 @@
-const express = require('express')
+import express from "express";
+import morgan from "morgan";
+import routerProducto from "./routes/products.router";
+import dotenv from "dotenv";
+const app = express();
 
-const app = express()
+//Settings
+app.set("port", process.env.PORT || 3000);
 
+//middlewares
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+dotenv.config();
 
-app.listen(3000)
-console.log('Servidor en el puerto 3000')
-module.exports = app;
+//Router
+app.use("/api/products", routerProducto);
+app.listen(app.get("port"), () =>
+  console.log(`Server working! port: ${app.get("port")}`)
+);
+
+export default app;
