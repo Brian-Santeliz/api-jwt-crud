@@ -1,19 +1,30 @@
 import Users from "../models/Users";
-import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 export const registerControllerPost = async (req, res) => {
   try {
     //verify this user dont exist
-    const { email, password } = req.body;
+    const { email, name, password } = req.body;
     const responseEmail = await Users.findOne({ email });
     if (responseEmail) return res.status(400).json("user already exist");
 
-    let userSaved = new Users(req.body);
-    //encrypt password
-    const salt = await bcrypt.genSalt(10);
-    userSaved.password = await bcrypt.hash(password, salt);
-
+    //create new user & encript password
+    let userSaved = new Users({
+      name,
+      email,
+      password: await Users.encryptPassword(password),
+    });
     await userSaved.save(userSaved);
-    res.status(201).json(userSaved);
+
+    //create JWT
+    const payload = {
+      id: userSaved.id,
+    };
+    const options = {
+      expiresIn: 3600, //seconds
+    };
+    //verify jwt and check if is same id in payload
+    const Jwt = jwt.sign(payload, process.env.SECRET_KEY, options);
+    res.status(201).json(Jwt);
   } catch (error) {
     console.error(error);
     res.status(500).json("something was wrong");

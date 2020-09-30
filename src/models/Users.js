@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import bcrypt from "bcrypt";
 const userSchema = new Schema({
   name: {
     type: String,
@@ -19,4 +19,14 @@ const userSchema = new Schema({
   },
 });
 
+//encrypt password
+userSchema.statics.encryptPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
+
+//Verify same password
+userSchema.statics.verifyPassword = async (password, pswHash) => {
+  return await bcrypt.compare(password, pswHash);
+};
 export default model("Users", userSchema);
