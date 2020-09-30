@@ -1,7 +1,8 @@
 import express from "express";
 import morgan from "morgan";
-import routerProducto from "./routes/products.router";
 import dotenv from "dotenv";
+import routerProducto from "./routes/products.router";
+import routerUsers from "./routes/users.router";
 const app = express();
 
 //Settings
@@ -15,6 +16,9 @@ dotenv.config();
 
 //Router
 app.use("/api/products", routerProducto);
+app.use("/api/register", routerUsers);
+
+//Listening
 app.listen(app.get("port"), () =>
   console.log(`Server working! port: ${app.get("port")}`)
 );
