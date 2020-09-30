@@ -1,10 +1,11 @@
 import Product from "../models/Products";
-
+import Users from "../models/Users";
 export const getController = async (req, res) => {
   try {
     const product = await Product.find();
     if (!product) return res.status(200).json("Product stock is empty");
-    res.status(200).json(product);
+    const userSession = await Users.findOne({ _id: req.userId });
+    res.status(200).json({ product, user: userSession.name });
   } catch (error) {
     console.error(error);
   }
