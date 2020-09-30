@@ -1,5 +1,6 @@
 import Users from "../models/Users";
 import jwt from "jsonwebtoken";
+
 export const registerControllerPost = async (req, res) => {
   try {
     //verify this user dont exist
