@@ -5,7 +5,7 @@ export const loginControllerPost = async (req, res) => {
   //check if the email exist
   let checkUser = await Users.findOne({ email });
   if (!checkUser) return res.status(400).json("this user don't exist");
-  //check password
+  //check password is the same
   const resPass = await Users.verifyPassword(password, checkUser.password);
   if (!resPass) return res.status(403).json("password incorrect");
 
