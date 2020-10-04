@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import helmet from "helmet";
 import routerProducts from "./routes/products.router";
 import routerRegister from "./routes/register.router";
 import routerLogin from "./routes/login.router";
@@ -16,6 +17,7 @@ app.set("port", process.env.PORT || 3000);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 //Router
 app.use("/api/welcome", welcome);
