@@ -6,7 +6,8 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "dev": "nodemon src/ --exec babel-node",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "test":" mocha src/testing"
   },
   "keywords": [],
   "author": "Brian Santeliz",
