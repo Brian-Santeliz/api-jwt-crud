@@ -19,7 +19,7 @@ export const getByIdController = async (req, res) => {
     if (!error.isEmpty()) return res.status(400).json({ error: error.array() });
     const product = await Product.findOne({ _id: req.params.id });
     //check de product exist
-    if (!product) return res.status(404).json("This product dont exist");
+    if (!product) return res.status(404).json("This product not exist");
     res.status(200).json(product);
   } catch (error) {
     console.error(error);
@@ -42,6 +42,8 @@ export const postController = async (req, res) => {
 
 export const putController = async (req, res) => {
   try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) return res.status(400).json(error.array());
     const { id } = req.params;
     const producUpdated = await Product.findOneAndUpdate(
       { _id: id },
@@ -50,6 +52,7 @@ export const putController = async (req, res) => {
         new: true,
       }
     );
+    if (!producUpdated) return res.status(400).json("Product not exist");
     res
       .status(201)
       .json({ msg: "Product update succefully", data: producUpdated });
@@ -60,7 +63,10 @@ export const putController = async (req, res) => {
 
 export const deleteController = async (req, res) => {
   try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) return res.status(400).json(error.array());
     const { id } = req.params;
+
     await Product.findOneAndRemove({ _id: id });
     res.status(200).json("Product delete succesfully");
   } catch (error) {
