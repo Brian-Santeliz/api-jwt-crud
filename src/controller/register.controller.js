@@ -1,8 +1,12 @@
 import Users from "../models/Users";
 import jwt from "jsonwebtoken";
-
+import { validationResult } from "express-validator";
 export const registerControllerPost = async (req, res) => {
   try {
+    //check for de express-validator
+    const error = validationResult(req);
+    if (!error.isEmpty()) return res.status(400).json(error.array());
+
     //verify this user dont exist
     const { email, name, password } = req.body;
     const responseEmail = await Users.findOne({ email });
